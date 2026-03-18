@@ -500,6 +500,8 @@ select {
     </div>
 
     <div class="actions-bar">
+      <button class="btn" id="clearAllBtn">Clear All</button>
+      <button class="btn" id="loadPrevBtn" style="display:none;">Load previous decision</button>
       <button class="btn" id="copyBtn">Copy Text</button>
       <label class="field-label" for="fontSizeSelect" style="margin-left:8px;">Text size:</label>
       <select id="fontSizeSelect"></select>
@@ -509,7 +511,7 @@ select {
 
   <div class="status-bar">
     <span id="statusMsg">Ready.</span>
-    <span>Pros &amp; Cons v1.4</span>
+    <span>Pros &amp; Cons v1.5</span>
   </div>
 
 </div><!-- /window -->
@@ -565,21 +567,37 @@ function initFontSelect() {
 var state = {topic:'', pros:[], cons:[]};
 
 function loadState() {
+  var prev = localStorage.getItem('proscons_mac1');
+  if (prev) {
+    localStorage.setItem('proscons_mac1_prev', prev);
+  }
+  state = {topic:'', pros:[], cons:[]};
+  localStorage.removeItem('proscons_mac1');
+  renderAll();
+  updateLoadPrevBtn();
+}
+
+function updateLoadPrevBtn() {
+  var btn = document.getElementById('loadPrevBtn');
+  btn.style.display = localStorage.getItem('proscons_mac1_prev') ? '' : 'none';
+}
+
+function loadPrevious() {
   try {
-    var s = localStorage.getItem('proscons_mac1');
-    if (s) {
-      var p = JSON.parse(s);
-      state.topic = p.topic || '';
-      state.pros  = p.pros  || [];
-      state.cons  = p.cons  || [];
-      document.getElementById('topicInput').value = state.topic;
-      if (state.topic) {
-        document.getElementById('titleDecision').textContent = state.topic;
-        document.title = 'Pros & Cons \u2014 ' + state.topic;
-      }
-      renderAll();
-    }
-  } catch(e) {}
+    var s = localStorage.getItem('proscons_mac1_prev');
+    if (!s) { setStatus('No previous decision found.'); return; }
+    var p = JSON.parse(s);
+    state.topic = p.topic || '';
+    state.pros  = p.pros  || [];
+    state.cons  = p.cons  || [];
+    document.getElementById('topicInput').value = state.topic;
+    var label = state.topic || 'Untitled';
+    document.getElementById('titleDecision').textContent = label;
+    document.title = 'Pros & Cons \u2014 ' + label;
+    saveState();
+    renderAll();
+    setStatus('Previous decision loaded.');
+  } catch(e) { setStatus('Could not load previous decision.'); }
 }
 
 function saveState() {
@@ -711,13 +729,13 @@ function updateScore() {
 }
 
 function clearAll() {
-  if (!confirm('Clear all items?\n\nThis cannot be undone.')) return;
   state.pros = []; state.cons = []; state.topic = '';
   document.getElementById('topicInput').value = '';
   document.getElementById('titleDecision').textContent = 'Untitled';
   document.title = 'Pros & Cons';
-  saveState();
+  localStorage.removeItem('proscons_mac1');
   renderAll();
+  updateLoadPrevBtn();
   setStatus('Cleared.');
 }
 
@@ -742,6 +760,8 @@ function setStatus(msg) {
   document.getElementById('statusMsg').textContent = msg;
 }
 
+document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+document.getElementById('loadPrevBtn').addEventListener('click', loadPrevious);
 document.getElementById('proAddBtn').addEventListener('click', function() { addItem('pros'); });
 document.getElementById('conAddBtn').addEventListener('click', function() { addItem('cons'); });
 document.getElementById('copyBtn').addEventListener('click', copyText);
