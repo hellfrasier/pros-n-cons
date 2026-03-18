@@ -449,7 +449,7 @@ select {
 
     <div class="field-row">
       <label class="field-label" for="topicInput">Decision:</label>
-      <input type="text" id="topicInput" placeholder="e.g. Should I move to a new city?" maxlength="80" style="flex:1;">
+      <input type="text" id="topicInput" maxlength="80" style="flex:1;">
     </div>
 
     <div class="score-wrap" id="scoreSection" style="display:none;">
@@ -511,7 +511,7 @@ select {
 
   <div class="status-bar">
     <span id="statusMsg">Ready.</span>
-    <span>Pros &amp; Cons v1.5</span>
+    <span>Pros &amp; Cons v1.6</span>
   </div>
 
 </div><!-- /window -->
@@ -564,7 +564,20 @@ function initFontSelect() {
 
 
 
-var state = {topic:'', pros:[], cons:[]};
+var PLACEHOLDERS = [
+  'e.g. Marry Kevin?',
+  'e.g. Extra slice of pie?',
+  'e.g. Another $400 wig?',
+  'e.g. Dalmatian fur coat?',
+  'e.g. Open the pod bay doors?',
+  'e.g. Fight for my right to party?',
+  'e.g. Hold \'em? Fold \'em? Walk away? (pick one)',
+  'e.g. Kill my stepfather to avenge my father?'
+];
+
+document.getElementById('topicInput').placeholder = PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)];
+
+
 
 function loadState() {
   var prev = localStorage.getItem('proscons_mac1');
