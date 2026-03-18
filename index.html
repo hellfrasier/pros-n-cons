@@ -1,760 +1,660 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pros & Cons</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
-  :root {
-    --bg: #F9F7F2;
-    --surface: #FFFFFF;
-    --border: #E8E4DC;
-    --text: #1A1A18;
-    --muted: #7A7870;
-    --pro: #1D6B45;
-    --pro-bg: #E8F5EE;
-    --pro-accent: #2D9B65;
-    --con: #9B2D2D;
-    --con-bg: #FAF0F0;
-    --con-accent: #D94B4B;
-    --accent: #3B4CCA;
-    --accent-light: #EEF0FD;
-    --shadow: 0 2px 16px rgba(0,0,0,0.07);
-    --radius: 14px;
-    --transition: 0.18s ease;
-  }
- 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 0;
-  }
- 
-  /* Header */
-  header {
-    text-align: center;
-    padding: 3rem 1rem 1.5rem;
-    position: relative;
-  }
- 
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    line-height: 1.1;
-  }
- 
-  header p.subtitle {
-    margin-top: 0.6rem;
-    color: var(--muted);
-    font-size: 0.95rem;
-    font-weight: 300;
-  }
- 
-  /* Topic input area */
-  .topic-section {
-    max-width: 640px;
-    margin: 0 auto 2rem;
-    padding: 0 1rem;
-  }
- 
-  .topic-wrapper {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.1rem 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    box-shadow: var(--shadow);
-  }
- 
-  .topic-wrapper label {
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-  }
- 
-  #topicInput {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    font-weight: 400;
-    color: var(--text);
-    background: transparent;
-    width: 100%;
-  }
- 
-  #topicInput::placeholder {
-    color: #C8C4BC;
-    font-style: italic;
-  }
- 
-  /* Score bar */
-  .score-bar-wrapper {
-    max-width: 640px;
-    margin: 0 auto 2rem;
-    padding: 0 1rem;
-  }
- 
-  .score-bar {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    height: 10px;
-    overflow: hidden;
-    position: relative;
-  }
- 
-  .score-fill-pro {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    background: var(--pro-accent);
-    border-radius: 100px;
-    transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  }
- 
-  .score-fill-con {
-    position: absolute;
-    right: 0; top: 0; bottom: 0;
-    background: var(--con-accent);
-    border-radius: 100px;
-    transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  }
- 
-  .score-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-  }
- 
-  .score-labels .pro-label { color: var(--pro); font-weight: 500; }
-  .score-labels .con-label { color: var(--con); font-weight: 500; }
-  .score-labels .verdict {
-    color: var(--muted);
-    font-size: 0.75rem;
-    font-style: italic;
-    text-align: center;
-    flex: 1;
-  }
- 
-  /* Main columns */
-  .columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    max-width: 840px;
-    margin: 0 auto;
-    padding: 0 1rem 3rem;
-  }
- 
-  @media (max-width: 580px) {
-    .columns { grid-template-columns: 1fr; }
-  }
- 
-  .column {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
- 
-  .column-header {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 1rem 1.2rem 0.9rem;
-    border-bottom: 1px solid var(--border);
-  }
- 
-  .column.pros .column-header { background: var(--pro-bg); }
-  .column.cons .column-header { background: var(--con-bg); }
- 
-  .col-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 600;
-    flex-shrink: 0;
-  }
- 
-  .pros .col-icon { background: var(--pro-accent); color: white; }
-  .cons .col-icon { background: var(--con-accent); color: white; }
- 
-  .col-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-  }
- 
-  .pros .col-title { color: var(--pro); }
-  .cons .col-title { color: var(--con); }
- 
-  .col-count {
-    margin-left: auto;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--muted);
-    background: var(--bg);
-    padding: 2px 8px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-  }
- 
-  /* Items list */
-  .items-list {
-    list-style: none;
-    padding: 0;
-    min-height: 60px;
-  }
- 
-  .item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    padding: 0.75rem 1.2rem;
-    border-bottom: 1px solid var(--border);
-    animation: fadeSlide 0.25s ease;
-    position: relative;
-  }
- 
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
- 
-  .item:last-child { border-bottom: none; }
- 
-  .item-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    margin-top: 6px;
-    flex-shrink: 0;
-  }
- 
-  .pros .item-dot { background: var(--pro-accent); }
-  .cons .item-dot { background: var(--con-accent); }
- 
-  .item-text {
-    flex: 1;
-    font-size: 0.9rem;
-    line-height: 1.45;
-    color: var(--text);
-    cursor: text;
-    outline: none;
-    word-break: break-word;
-  }
- 
-  .item-text:focus {
-    color: var(--text);
-  }
- 
-  .item-delete {
-    opacity: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1;
-    padding: 0 2px;
-    border-radius: 4px;
-    transition: opacity var(--transition), color var(--transition);
-    flex-shrink: 0;
-  }
- 
-  .item:hover .item-delete { opacity: 1; }
-  .item-delete:hover { color: #D94B4B; }
- 
-  /* Add item input area */
-  .add-area {
-    padding: 0.65rem 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-top: 1px solid var(--border);
-    background: var(--bg);
-  }
- 
-  .add-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.875rem;
-    color: var(--text);
-  }
- 
-  .add-input::placeholder { color: #C0BDB5; }
- 
-  .add-btn {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 300;
-    transition: transform var(--transition), opacity var(--transition);
-    flex-shrink: 0;
-  }
- 
-  .pros .add-btn { background: var(--pro-accent); color: white; }
-  .cons .add-btn { background: var(--con-accent); color: white; }
-  .add-btn:hover { transform: scale(1.1); }
-  .add-btn:active { transform: scale(0.95); }
- 
-  /* Empty state */
-  .empty-hint {
-    padding: 1.2rem;
-    text-align: center;
-    color: #C0BDB5;
-    font-size: 0.82rem;
-    font-style: italic;
-  }
- 
-  /* Verdict banner */
-  .verdict-banner {
-    max-width: 640px;
-    margin: 0 auto 1rem;
-    padding: 0 1rem;
-  }
- 
-  .verdict-card {
-    background: var(--accent-light);
-    border: 1px solid #C4CAF8;
-    border-radius: var(--radius);
-    padding: 0.9rem 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    transition: opacity 0.4s ease;
-  }
- 
-  .verdict-icon {
-    font-size: 1.3rem;
-    flex-shrink: 0;
-  }
- 
-  .verdict-text {
-    font-size: 0.875rem;
-    color: var(--accent);
-    font-weight: 500;
-  }
- 
-  /* Reset button */
-  .actions {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    padding-bottom: 3rem;
-  }
- 
-  .btn-ghost {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 0.5rem 1.2rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
-    color: var(--muted);
-    cursor: pointer;
-    transition: border-color var(--transition), color var(--transition), background var(--transition);
-  }
- 
-  .btn-ghost:hover {
-    border-color: var(--text);
-    color: var(--text);
-    background: var(--surface);
-  }
- 
-  /* Drag-over highlight */
-  .column.drag-over .items-list {
-    background: rgba(0,0,0,0.03);
-    border-radius: 0 0 var(--radius) var(--radius);
-  }
- 
-  /* Weight badges */
-  .weight-badge {
-    font-size: 10px;
-    font-weight: 500;
-    padding: 1px 5px;
-    border-radius: 4px;
-    cursor: pointer;
-    user-select: none;
-    flex-shrink: 0;
-    margin-top: 3px;
-    transition: opacity var(--transition);
-    opacity: 0;
-  }
- 
-  .pros .weight-badge { background: #C6E8D6; color: #1A5C38; }
-  .cons .weight-badge { background: #F5CCCC; color: #8B2020; }
- 
-  .item:hover .weight-badge { opacity: 1; }
-  .weight-badge.active { opacity: 1; }
+<title>Pros &amp; Cons</title>
+<style type="text/css">
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Chicago", "Geneva", "Charcoal", Arial, sans-serif;
+  font-size: 12px;
+  background-color: #ffffff;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAAAAABX3VL4AAAADklEQVQI12NgYGBg+A8AAQQAAd8GNQQAAAAASUVORK5CYII=");
+  color: #000000;
+  margin: 0;
+  padding: 16px;
+}
+
+/* ── WINDOW ── */
+.window {
+  max-width: 680px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+/* ── TITLE BAR ── */
+.titlebar {
+  background: #ffffff;
+  border-bottom: 1px solid #000000;
+  padding: 0 4px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  position: relative;
+}
+
+.titlebar-stripes {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    #000000 0px, #000000 1px,
+    #ffffff 1px, #ffffff 2px
+  );
+  opacity: 1;
+}
+
+.titlebar-title {
+  position: relative;
+  z-index: 1;
+  font-size: 12px;
+  font-weight: bold;
+  background: #ffffff;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+.titlebar-close {
+  position: relative;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #000000;
+  background: #ffffff;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+/* ── WINDOW BODY ── */
+.window-body {
+  padding: 10px 12px 8px;
+}
+
+/* ── TYPOGRAPHY ── */
+.page-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+  margin: 0 0 2px;
+  color: #000000;
+}
+
+.page-subtitle {
+  text-align: center;
+  font-size: 11px;
+  color: #555555;
+  margin-bottom: 10px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #000000;
+  margin: 8px 0;
+}
+
+/* ── INPUT FIELDS ── */
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+input[type="text"] {
+  border: 1px solid #000000;
+  background: #ffffff;
+  font-family: "Geneva", "Charcoal", Arial, sans-serif;
+  font-size: 12px;
+  color: #000000;
+  padding: 2px 4px;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+input[type="text"]:focus {
+  background: #ffffff;
+  box-shadow: inset 1px 1px 0 #000000;
+}
+
+/* ── SCORE BAR ── */
+.score-wrap { margin-bottom: 6px; }
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.score-lbl-pro { color: #1AFF32; font-weight: bold; width: 48px; }
+.score-lbl-con { color: #FF4612; font-weight: bold; width: 48px; text-align: right; }
+
+.score-bar-outer {
+  flex: 1;
+  height: 12px;
+  border: 1px solid #000000;
+  background: #cccccc;
+  position: relative;
+  overflow: hidden;
+}
+
+.score-bar-pro {
+  height: 100%;
+  background: #1AFF32;
+  position: absolute;
+  left: 0; top: 0;
+  transition: width 0.2s;
+}
+
+.score-bar-con {
+  height: 100%;
+  background: #FF4612;
+  position: absolute;
+  right: 0; top: 0;
+  transition: width 0.2s;
+}
+
+/* ── VERDICT ── */
+.verdict-row {
+  border: 1px solid #000000;
+  background: #eeeeee;
+  font-size: 11px;
+  padding: 3px 7px;
+  margin-bottom: 8px;
+  display: none;
+}
+
+/* ── COLUMNS ── */
+.cols {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.col { flex: 1; min-width: 0; border: 1px solid #000000; }
+
+.col-header {
+  font-weight: bold;
+  font-size: 12px;
+  padding: 2px 7px 3px;
+  border-bottom: 1px solid #000000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 1px;
+}
+
+.pros-header { background: #1AFF32; color: #000000; }
+.cons-header { background: #FF4612; color: #000000; }
+
+.col-count {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: normal;
+  background: #ffffff;
+  color: #000000;
+  padding: 0 4px;
+  border: 1px solid #000000;
+  letter-spacing: 0;
+  font-family: "Courier New", monospace;
+}
+
+/* ── ITEMS ── */
+.items-area {
+  min-height: 140px;
+  background: #ffffff;
+  padding: 0;
+}
+
+.item-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 2px 5px;
+  border-bottom: 1px dotted #aaaaaa;
+  gap: 3px;
+  animation: flash-in 0.3s;
+}
+
+@keyframes flash-in {
+  0%   { background: #cccccc; }
+  100% { background: transparent; }
+}
+
+.item-row:last-child { border-bottom: none; }
+
+.item-bullet {
+  font-size: 11px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  width: 9px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.pros-col .item-bullet { color: #1AFF32; }
+.cons-col .item-bullet { color: #FF4612; }
+
+.item-text-editable {
+  flex: 1;
+  font-size: 12px;
+  font-family: "Geneva", Arial, sans-serif;
+  outline: none;
+  min-width: 0;
+  word-break: break-word;
+  line-height: 1.4;
+  cursor: text;
+  color: #000000;
+}
+
+.item-text-editable:focus {
+  background: #eeeeee;
+}
+
+.item-del-btn {
+  background: none;
+  border: none;
+  cursor: default;
+  font-size: 10px;
+  color: #888888;
+  padding: 1px 1px 0;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.item-del-btn:hover { color: #000000; }
+
+/* ── WEIGHT TOGGLE ── */
+.item-bullet {
+  cursor: default;
+  user-select: none;
+}
+.item-bullet:hover { text-decoration: underline; }
+
+.item-row.weighted {
+  background: #eeeeee;
+}
+.item-row.weighted .item-text-editable {
+  font-weight: bold;
+}
+.weight-marker {
+  font-size: 9px;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+  color: #444444;
+  flex-shrink: 0;
+  margin-top: 3px;
+  width: 14px;
+  text-align: left;
+}
+
+.empty-hint {
+  padding: 10px 6px;
+  color: #888888;
+  font-size: 11px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── ADD AREA ── */
+.add-area {
+  border-top: 1px solid #000000;
+  padding: 4px 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #eeeeee;
+}
+
+.add-area input[type="text"] {
+  flex: 1;
+  font-size: 11px;
+  min-width: 0;
+  border: 1px solid #888888;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  background: #ffffff;
+  border: 1px solid #000000;
+  font-family: "Geneva", "Charcoal", Arial, sans-serif;
+  font-size: 11px;
+  color: #000000;
+  padding: 2px 9px;
+  cursor: default;
+  border-radius: 0;
+  -webkit-appearance: none;
+  white-space: nowrap;
+}
+
+.btn:active {
+  background: #000000;
+  color: #ffffff;
+}
+
+.btn-default {
+  border: 2px solid #000000;
+  padding: 1px 8px;
+}
+
+/* ── ACTIONS ── */
+.actions-bar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 0 2px;
+}
+
+/* ── STATUS BAR ── */
+.status-bar {
+  border-top: 1px solid #000000;
+  padding: 2px 8px;
+  font-size: 10px;
+  color: #444444;
+  background: #eeeeee;
+  display: flex;
+  justify-content: space-between;
+}
+
 </style>
 </head>
 <body>
- 
-<header>
-  <h1>Pros &amp; Cons</h1>
-  <p class="subtitle">Lay out both sides. Think it through.</p>
-</header>
- 
-<div class="topic-section">
-  <div class="topic-wrapper">
-    <label>Decision</label>
-    <input id="topicInput" type="text" placeholder="e.g. Moving to a new city" maxlength="80" spellcheck="false">
+
+<div class="window">
+
+  <!-- Title bar -->
+  <div class="titlebar">
+    <div class="titlebar-stripes"></div>
+    <div class="titlebar-close"></div>
+    <span class="titlebar-title">Pros &amp; Cons &mdash; <span id="titleDecision">Untitled</span></span>
   </div>
-</div>
- 
-<div class="score-bar-wrapper" id="scoreSection" style="display:none;">
-  <div class="score-bar">
-    <div class="score-fill-pro" id="scoreProFill" style="width:50%"></div>
-    <div class="score-fill-con" id="scoreConFill" style="width:50%"></div>
-  </div>
-  <div class="score-labels">
-    <span class="pro-label" id="proScore">0 pros</span>
-    <span class="verdict" id="verdictText"></span>
-    <span class="con-label" id="conScore">0 cons</span>
-  </div>
-</div>
- 
-<div class="verdict-banner" id="verdictBanner" style="display:none;">
-  <div class="verdict-card">
-    <span class="verdict-icon" id="verdictIcon">⚖️</span>
-    <span class="verdict-text" id="verdictMsg"></span>
-  </div>
-</div>
- 
-<div class="columns">
-  <!-- PROS -->
-  <div class="column pros" id="proCol" 
-    ondragover="handleDragOver(event,'pros')" 
-    ondragleave="handleDragLeave(event,'pros')" 
-    ondrop="handleDrop(event,'pros')">
-    <div class="column-header">
-      <div class="col-icon">+</div>
-      <span class="col-title">Pros</span>
-      <span class="col-count" id="proCount">0</span>
+
+
+  <div class="window-body">
+
+    <div class="page-title">Pros &amp; Cons</div>
+    <div class="page-subtitle">Enter a decision, add pros and cons. Click + or &minus; to double an item's weight.</div>
+
+    <hr class="divider">
+
+    <div class="field-row">
+      <label class="field-label" for="topicInput">Decision:</label>
+      <input type="text" id="topicInput" placeholder="e.g. Should I move to a new city?" maxlength="80" style="flex:1;">
     </div>
-    <ul class="items-list" id="proList">
-      <li class="empty-hint" id="proEmpty">Add your first pro below</li>
-    </ul>
-    <div class="add-area">
-      <input class="add-input" id="proInput" type="text" placeholder="Add a pro..." maxlength="160">
-      <button class="add-btn" onclick="addItem('pros')" title="Add pro">+</button>
+
+    <div class="score-wrap" id="scoreSection" style="display:none;">
+      <div class="score-row">
+        <span class="score-lbl-pro" id="proScoreLbl">0 pros</span>
+        <div class="score-bar-outer">
+          <div class="score-bar-pro" id="scoreProFill" style="width:50%;"></div>
+          <div class="score-bar-con" id="scoreConFill" style="width:50%;"></div>
+        </div>
+        <span class="score-lbl-con" id="conScoreLbl">0 cons</span>
+      </div>
     </div>
+
+    <div class="verdict-row" id="verdictRow">
+      <b>Result:</b> <span id="verdictMsg"></span>
+    </div>
+
+    <div class="cols">
+      <!-- PROS -->
+      <div class="col pros-col">
+        <div class="col-header pros-header">
+          + PROS
+          <span class="col-count" id="proCount">0</span>
+        </div>
+        <div class="items-area" id="proList">
+          <div class="empty-hint" id="proEmpty">(none)</div>
+        </div>
+        <div class="add-area">
+          <input type="text" id="proInput" placeholder="Add a pro...">
+          <button class="btn btn-default" onclick="addItem('pros')">Add</button>
+        </div>
+      </div>
+
+      <!-- CONS -->
+      <div class="col cons-col">
+        <div class="col-header cons-header">
+          &minus; CONS
+          <span class="col-count" id="conCount">0</span>
+        </div>
+        <div class="items-area" id="conList">
+          <div class="empty-hint" id="conEmpty">(none)</div>
+        </div>
+        <div class="add-area">
+          <input type="text" id="conInput" placeholder="Add a con...">
+          <button class="btn btn-default" onclick="addItem('cons')">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn" id="copyBtn" onclick="copyText()">Copy Text</button>
+    </div>
+
+  </div><!-- /window-body -->
+
+  <div class="status-bar">
+    <span id="statusMsg">Ready.</span>
+    <span>Pros &amp; Cons v1.2</span>
   </div>
- 
-  <!-- CONS -->
-  <div class="column cons" id="conCol"
-    ondragover="handleDragOver(event,'cons')"
-    ondragleave="handleDragLeave(event,'cons')"
-    ondrop="handleDrop(event,'cons')">
-    <div class="column-header">
-      <div class="col-icon">−</div>
-      <span class="col-title">Cons</span>
-      <span class="col-count" id="conCount">0</span>
-    </div>
-    <ul class="items-list" id="conList">
-      <li class="empty-hint" id="conEmpty">Add your first con below</li>
-    </ul>
-    <div class="add-area">
-      <input class="add-input" id="conInput" type="text" placeholder="Add a con..." maxlength="160">
-      <button class="add-btn" onclick="addItem('cons')" title="Add con">+</button>
-    </div>
-  </div>
-</div>
- 
-<div class="actions">
-  <button class="btn-ghost" onclick="clearAll()">Clear all</button>
-  <button class="btn-ghost" onclick="copyToClipboard()">Copy as text</button>
-</div>
- 
-<script>
-const state = {
-  topic: '',
-  pros: [],
-  cons: []
-};
- 
-let dragSrc = null;
-let dragType = null;
- 
+
+</div><!-- /window -->
+
+<script type="text/javascript">
+var state = {topic:'', pros:[], cons:[]};
+
 function loadState() {
   try {
-    const saved = localStorage.getItem('proscons_v2');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      state.topic = parsed.topic || '';
-      state.pros = parsed.pros || [];
-      state.cons = parsed.cons || [];
+    var s = localStorage.getItem('proscons_mac1');
+    if (s) {
+      var p = JSON.parse(s);
+      state.topic = p.topic || '';
+      state.pros  = p.pros  || [];
+      state.cons  = p.cons  || [];
       document.getElementById('topicInput').value = state.topic;
+      if (state.topic) {
+        document.getElementById('titleDecision').textContent = state.topic;
+        document.title = 'Pros & Cons \u2014 ' + state.topic;
+      }
       renderAll();
     }
   } catch(e) {}
 }
- 
+
 function saveState() {
-  localStorage.setItem('proscons_v2', JSON.stringify(state));
+  localStorage.setItem('proscons_mac1', JSON.stringify(state));
 }
- 
+
 function renderAll() {
   renderList('pros');
   renderList('cons');
   updateScore();
 }
- 
+
 function renderList(type) {
-  const list = document.getElementById(type === 'pros' ? 'proList' : 'conList');
-  const emptyEl = document.getElementById(type === 'pros' ? 'proEmpty' : 'conEmpty');
-  const items = state[type];
- 
-  Array.from(list.querySelectorAll('.item')).forEach(el => el.remove());
- 
+  var listEl  = document.getElementById(type === 'pros' ? 'proList'  : 'conList');
+  var emptyEl = document.getElementById(type === 'pros' ? 'proEmpty' : 'conEmpty');
+  var cntEl   = document.getElementById(type === 'pros' ? 'proCount' : 'conCount');
+  var items   = state[type];
+  var old = listEl.querySelectorAll('.item-row');
+  for (var i = 0; i < old.length; i++) old[i].parentNode.removeChild(old[i]);
   if (items.length === 0) {
     emptyEl.style.display = '';
   } else {
     emptyEl.style.display = 'none';
-    items.forEach((item, idx) => {
-      const li = createItemEl(type, item, idx);
-      list.appendChild(li);
-    });
-  }
- 
-  document.getElementById(type === 'pros' ? 'proCount' : 'conCount').textContent = items.length;
-}
- 
-function createItemEl(type, item, idx) {
-  const li = document.createElement('li');
-  li.className = 'item';
-  li.draggable = true;
-  li.dataset.idx = idx;
-  li.dataset.type = type;
- 
-  li.addEventListener('dragstart', (e) => {
-    dragSrc = idx;
-    dragType = type;
-    e.dataTransfer.effectAllowed = 'move';
-    setTimeout(() => li.style.opacity = '0.4', 0);
-  });
-  li.addEventListener('dragend', () => { li.style.opacity = ''; });
- 
-  const dot = document.createElement('span');
-  dot.className = 'item-dot';
- 
-  const weightBadge = document.createElement('span');
-  weightBadge.className = 'weight-badge' + (item.weight === 2 ? ' active' : '');
-  weightBadge.title = 'Mark as important (2x weight)';
-  weightBadge.textContent = item.weight === 2 ? '2×' : '2×';
-  weightBadge.onclick = () => toggleWeight(type, idx);
- 
-  const text = document.createElement('span');
-  text.className = 'item-text';
-  text.contentEditable = true;
-  text.spellcheck = true;
-  text.textContent = item.text;
-  text.addEventListener('blur', () => {
-    const newText = text.textContent.trim();
-    if (newText) {
-      state[type][idx].text = newText;
-      saveState();
-    } else {
-      removeItem(type, idx);
+    for (var i = 0; i < items.length; i++) {
+      listEl.appendChild(makeRow(type, items[i], i));
     }
-  });
-  text.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); text.blur(); }
-  });
- 
-  const del = document.createElement('button');
-  del.className = 'item-delete';
-  del.innerHTML = '×';
+  }
+  cntEl.textContent = items.length;
+}
+
+function makeRow(type, item, idx) {
+  var row = document.createElement('div');
+  row.className = 'item-row' + (item.weight === 2 ? ' weighted' : '');
+
+  var bullet = document.createElement('span');
+  bullet.className = 'item-bullet';
+  bullet.textContent = type === 'pros' ? '+' : '\u2212';
+  bullet.title = item.weight === 2 ? 'Click to remove double weight' : 'Click to double this item\u2019s weight';
+  (function(tp, ti) {
+    bullet.onclick = function() { toggleWeight(tp, ti); };
+  })(type, idx);
+
+  var txt = document.createElement('span');
+  txt.className = 'item-text-editable';
+  txt.contentEditable = 'true';
+  txt.spellcheck = true;
+  txt.textContent = item.text;
+  (function(el, tp, ti) {
+    el.addEventListener('blur', function() {
+      var v = el.textContent.trim();
+      if (v) { state[tp][ti].text = v; saveState(); }
+      else   { removeItem(tp, ti); }
+    });
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    });
+  })(txt, type, idx);
+
+  var marker = document.createElement('span');
+  marker.className = 'weight-marker';
+  marker.textContent = item.weight === 2 ? '2x' : '';
+
+  var del = document.createElement('button');
+  del.className = 'item-del-btn';
+  del.textContent = '\u2715';
   del.title = 'Remove';
-  del.onclick = () => removeItem(type, idx);
- 
-  li.appendChild(dot);
-  li.appendChild(text);
-  li.appendChild(weightBadge);
-  li.appendChild(del);
-  return li;
+  (function(tp, ti) {
+    del.onclick = function() { removeItem(tp, ti); };
+  })(type, idx);
+
+  row.appendChild(bullet);
+  row.appendChild(txt);
+  row.appendChild(marker);
+  row.appendChild(del);
+  return row;
 }
- 
+
 function toggleWeight(type, idx) {
-  state[type][idx].weight = state[type][idx].weight === 2 ? 1 : 2;
+  state[type][idx].weight = (state[type][idx].weight === 2) ? 1 : 2;
   saveState();
   renderList(type);
   updateScore();
+  setStatus(state[type][idx].weight === 2 ? 'Item doubled.' : 'Item weight reset.');
 }
- 
+
 function addItem(type) {
-  const inputId = type === 'pros' ? 'proInput' : 'conInput';
-  const input = document.getElementById(inputId);
-  const val = input.value.trim();
-  if (!val) return;
-  state[type].push({ text: val, weight: 1 });
-  input.value = '';
+  var id  = type === 'pros' ? 'proInput' : 'conInput';
+  var inp = document.getElementById(id);
+  var val = inp.value.trim();
+  if (!val) { setStatus('Please type something first.'); return; }
+  state[type].push({text: val, weight: 1});
+  inp.value = '';
   saveState();
   renderList(type);
   updateScore();
-  input.focus();
+  inp.focus();
+  setStatus((type === 'pros' ? 'Pro' : 'Con') + ' added.');
 }
- 
+
 function removeItem(type, idx) {
   state[type].splice(idx, 1);
   saveState();
   renderList(type);
   updateScore();
+  setStatus('Item removed.');
 }
- 
+
 function updateScore() {
-  const proScore = state.pros.reduce((s, i) => s + (i.weight || 1), 0);
-  const conScore = state.cons.reduce((s, i) => s + (i.weight || 1), 0);
-  const total = proScore + conScore;
- 
-  const scoreSection = document.getElementById('scoreSection');
-  const verdictBanner = document.getElementById('verdictBanner');
- 
-  if (total === 0) {
-    scoreSection.style.display = 'none';
-    verdictBanner.style.display = 'none';
-    return;
-  }
- 
-  scoreSection.style.display = '';
-  const proFraction = proScore / total;
-  const conFraction = conScore / total;
- 
-  document.getElementById('scoreProFill').style.width = (proFraction * 100) + '%';
-  document.getElementById('scoreConFill').style.width = (conFraction * 100) + '%';
-  document.getElementById('proScore').textContent = state.pros.length + (state.pros.length === 1 ? ' pro' : ' pros');
-  document.getElementById('conScore').textContent = state.cons.length + (state.cons.length === 1 ? ' con' : ' cons');
- 
-  let verdictMsg = '';
-  let verdictIcon = '⚖️';
-  const diff = proScore - conScore;
- 
-  if (diff === 0) {
-    verdictMsg = "It's a tie — you need more information.";
-    verdictIcon = '⚖️';
-  } else if (diff >= 4) {
-    verdictMsg = "The pros clearly outweigh the cons.";
-    verdictIcon = '✅';
-  } else if (diff > 0) {
-    verdictMsg = "Slightly more pros — leaning toward yes.";
-    verdictIcon = '🟢';
-  } else if (diff <= -4) {
-    verdictMsg = "The cons clearly outweigh the pros.";
-    verdictIcon = '🔴';
-  } else {
-    verdictMsg = "Slightly more cons — proceed with caution.";
-    verdictIcon = '🟡';
-  }
- 
-  document.getElementById('verdictText').textContent = '';
-  document.getElementById('verdictBanner').style.display = '';
-  document.getElementById('verdictIcon').textContent = verdictIcon;
-  document.getElementById('verdictMsg').textContent = verdictMsg;
+  var ps = 0, cs = 0;
+  for (var i = 0; i < state.pros.length; i++) ps += (state.pros[i].weight || 1);
+  for (var i = 0; i < state.cons.length; i++) cs += (state.cons[i].weight || 1);
+  var total = ps + cs;
+  var ss = document.getElementById('scoreSection');
+  var vr = document.getElementById('verdictRow');
+  if (total === 0) { ss.style.display = 'none'; vr.style.display = 'none'; return; }
+  ss.style.display = '';
+  document.getElementById('proScoreLbl').textContent = state.pros.length + (state.pros.length === 1 ? ' pro' : ' pros');
+  document.getElementById('conScoreLbl').textContent = state.cons.length + (state.cons.length === 1 ? ' con' : ' cons');
+  document.getElementById('scoreProFill').style.width = Math.round(ps / total * 100) + '%';
+  document.getElementById('scoreConFill').style.width = Math.round(cs / total * 100) + '%';
+  var diff = ps - cs, msg;
+  if      (diff === 0) msg = "It\u2019s a tie. More information needed.";
+  else if (diff >= 4)  msg = "Pros clearly outweigh the cons.";
+  else if (diff > 0)   msg = "Leaning toward yes.";
+  else if (diff <= -4) msg = "Cons clearly outweigh the pros.";
+  else                 msg = "Leaning toward no.";
+  vr.style.display = '';
+  document.getElementById('verdictMsg').textContent = msg;
 }
- 
+
 function clearAll() {
-  if (!confirm('Clear everything?')) return;
-  state.pros = [];
-  state.cons = [];
-  state.topic = '';
+  if (!confirm('Clear all items?\n\nThis cannot be undone.')) return;
+  state.pros = []; state.cons = []; state.topic = '';
   document.getElementById('topicInput').value = '';
+  document.getElementById('titleDecision').textContent = 'Untitled';
+  document.title = 'Pros & Cons';
   saveState();
   renderAll();
+  setStatus('Cleared.');
 }
- 
-function copyToClipboard() {
-  const topic = state.topic ? `Decision: ${state.topic}\n\n` : '';
-  const pros = state.pros.map(p => `+ ${p.text}${p.weight === 2 ? ' [important]' : ''}`).join('\n');
-  const cons = state.cons.map(c => `− ${c.text}${c.weight === 2 ? ' [important]' : ''}`).join('\n');
-  const text = `${topic}PROS\n${pros || '(none)'}\n\nCONS\n${cons || '(none)'}`;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = [...document.querySelectorAll('.btn-ghost')].find(b => b.textContent.includes('Copy'));
-    if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy as text', 1500); }
-  });
+
+function copyText() {
+  var topic = state.topic ? 'Decision: ' + state.topic + '\r\n\r\n' : '';
+  var pros  = state.pros.map(function(p) { return '  + ' + p.text; }).join('\r\n');
+  var cons  = state.cons.map(function(c) { return '  \u2212 ' + c.text; }).join('\r\n');
+  var out   = topic + 'Pros:\r\n' + (pros || '  (none)') + '\r\n\r\nCons:\r\n' + (cons || '  (none)');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(out).then(function() {
+      var btn = document.getElementById('copyBtn');
+      btn.textContent = 'Copied!';
+      setStatus('Copied to clipboard.');
+      setTimeout(function() { btn.textContent = 'Copy Text'; }, 1800);
+    });
+  } else {
+    alert(out);
+  }
 }
- 
-// Keyboard: press Enter to add
-document.getElementById('proInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addItem('pros'); });
-document.getElementById('conInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addItem('cons'); });
- 
-// Topic auto-save
-document.getElementById('topicInput').addEventListener('input', (e) => {
+
+function setStatus(msg) {
+  document.getElementById('statusMsg').textContent = msg;
+}
+
+document.getElementById('proInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addItem('pros'); });
+document.getElementById('conInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addItem('cons'); });
+document.getElementById('topicInput').addEventListener('input', function(e) {
   state.topic = e.target.value;
+  var label = state.topic || 'Untitled';
+  document.getElementById('titleDecision').textContent = label;
+  document.title = 'Pros & Cons \u2014 ' + label;
   saveState();
 });
- 
-// Drag & drop reorder
-function handleDragOver(e, type) {
-  e.preventDefault();
-  document.getElementById(type === 'pros' ? 'proCol' : 'conCol').classList.add('drag-over');
-}
- 
-function handleDragLeave(e, type) {
-  document.getElementById(type === 'pros' ? 'proCol' : 'conCol').classList.remove('drag-over');
-}
- 
-function handleDrop(e, type) {
-  e.preventDefault();
-  document.getElementById(type === 'pros' ? 'proCol' : 'conCol').classList.remove('drag-over');
-  if (dragSrc === null) return;
- 
-  const targetEl = e.target.closest('.item');
-  const targetIdx = targetEl ? parseInt(targetEl.dataset.idx) : state[type].length;
- 
-  if (dragType === type) {
-    // Reorder within same list
-    const [item] = state[type].splice(dragSrc, 1);
-    const insertAt = targetIdx > dragSrc ? targetIdx - 1 : targetIdx;
-    state[type].splice(insertAt, 0, item);
-  } else {
-    // Move across lists
-    const [item] = state[dragType].splice(dragSrc, 1);
-    const insertAt = targetIdx;
-    state[type].splice(insertAt, 0, item);
-    renderList(dragType);
-  }
- 
-  dragSrc = null;
-  dragType = null;
-  saveState();
-  renderList(type);
-  updateScore();
-}
- 
+
 loadState();
 </script>
+
 </body>
 </html>
- 
