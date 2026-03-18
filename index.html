@@ -479,7 +479,7 @@ select {
         </div>
         <div class="add-area">
           <input type="text" id="proInput" placeholder="Add a pro...">
-          <button class="btn btn-default" onclick="addItem('pros')">Add</button>
+          <button class="btn btn-default" id="proAddBtn">Add</button>
         </div>
       </div>
 
@@ -494,22 +494,22 @@ select {
         </div>
         <div class="add-area">
           <input type="text" id="conInput" placeholder="Add a con...">
-          <button class="btn btn-default" onclick="addItem('cons')">Add</button>
+          <button class="btn btn-default" id="conAddBtn">Add</button>
         </div>
       </div>
     </div>
 
     <div class="actions-bar">
-      <button class="btn" id="copyBtn" onclick="copyText()">Copy Text</button>
+      <button class="btn" id="copyBtn">Copy Text</button>
       <label class="field-label" for="fontSizeSelect" style="margin-left:8px;">Text size:</label>
-      <select id="fontSizeSelect" onchange="setFontSize(this.value)"></select>
+      <select id="fontSizeSelect"></select>
     </div>
 
   </div><!-- /window-body -->
 
   <div class="status-bar">
     <span id="statusMsg">Ready.</span>
-    <span>Pros &amp; Cons v1.3</span>
+    <span>Pros &amp; Cons v1.4</span>
   </div>
 
 </div><!-- /window -->
@@ -561,6 +561,8 @@ function initFontSelect() {
 }
 
 
+
+var state = {topic:'', pros:[], cons:[]};
 
 function loadState() {
   try {
@@ -740,6 +742,10 @@ function setStatus(msg) {
   document.getElementById('statusMsg').textContent = msg;
 }
 
+document.getElementById('proAddBtn').addEventListener('click', function() { addItem('pros'); });
+document.getElementById('conAddBtn').addEventListener('click', function() { addItem('cons'); });
+document.getElementById('copyBtn').addEventListener('click', copyText);
+document.getElementById('fontSizeSelect').addEventListener('change', function() { setFontSize(this.value); });
 document.getElementById('proInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addItem('pros'); });
 document.getElementById('conInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addItem('cons'); });
 
