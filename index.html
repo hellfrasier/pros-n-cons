@@ -12,12 +12,14 @@
 
 body {
   font-family: "Chicago", "Geneva", "Charcoal", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   background-color: #ffffff;
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAAAAABX3VL4AAAADklEQVQI12NgYGBg+A8AAQQAAd8GNQQAAAAASUVORK5CYII=");
   color: #000000;
   margin: 0;
-  padding: 16px;
+  padding: 12px;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* ── WINDOW ── */
@@ -34,7 +36,7 @@ body {
   background: #ffffff;
   border-bottom: 1px solid #000000;
   padding: 0 4px;
-  height: 20px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,7 +58,7 @@ body {
 .titlebar-title {
   position: relative;
   z-index: 1;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   background: #ffffff;
   padding: 0 6px;
@@ -94,7 +96,7 @@ body {
 
 .page-subtitle {
   text-align: center;
-  font-size: 11px;
+  font-size: 13px;
   color: #555555;
   margin-bottom: 10px;
 }
@@ -114,7 +116,7 @@ body {
 }
 
 .field-label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   white-space: nowrap;
 }
@@ -123,7 +125,7 @@ input[type="text"] {
   border: 1px solid #000000;
   background: #ffffff;
   font-family: "Geneva", "Charcoal", Arial, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   color: #000000;
   padding: 2px 4px;
   outline: none;
@@ -143,7 +145,7 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .score-lbl-pro { color: #1AFF32; font-weight: bold; width: 48px; }
@@ -178,7 +180,7 @@ input[type="text"]:focus {
 .verdict-row {
   border: 1px solid #000000;
   background: #eeeeee;
-  font-size: 11px;
+  font-size: 13px;
   padding: 3px 7px;
   margin-bottom: 8px;
   display: none;
@@ -195,7 +197,7 @@ input[type="text"]:focus {
 
 .col-header {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
   padding: 2px 7px 3px;
   border-bottom: 1px solid #000000;
   display: flex;
@@ -209,7 +211,7 @@ input[type="text"]:focus {
 
 .col-count {
   margin-left: auto;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: normal;
   background: #ffffff;
   color: #000000;
@@ -243,7 +245,7 @@ input[type="text"]:focus {
 .item-row:last-child { border-bottom: none; }
 
 .item-bullet {
-  font-size: 11px;
+  font-size: 13px;
   margin-top: 2px;
   flex-shrink: 0;
   width: 9px;
@@ -256,7 +258,7 @@ input[type="text"]:focus {
 
 .item-text-editable {
   flex: 1;
-  font-size: 12px;
+  font-size: 14px;
   font-family: "Geneva", Arial, sans-serif;
   outline: none;
   min-width: 0;
@@ -274,7 +276,7 @@ input[type="text"]:focus {
   background: none;
   border: none;
   cursor: default;
-  font-size: 10px;
+  font-size: 12px;
   color: #888888;
   padding: 1px 1px 0;
   font-family: Arial, sans-serif;
@@ -298,7 +300,7 @@ input[type="text"]:focus {
   font-weight: bold;
 }
 .weight-marker {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: bold;
   font-family: "Courier New", monospace;
   color: #444444;
@@ -328,7 +330,7 @@ input[type="text"]:focus {
 
 .add-area input[type="text"] {
   flex: 1;
-  font-size: 11px;
+  font-size: 13px;
   min-width: 0;
   border: 1px solid #888888;
 }
@@ -338,7 +340,7 @@ input[type="text"]:focus {
   background: #ffffff;
   border: 1px solid #000000;
   font-family: "Geneva", "Charcoal", Arial, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   color: #000000;
   padding: 2px 9px;
   cursor: default;
@@ -365,11 +367,40 @@ input[type="text"]:focus {
   padding: 4px 0 2px;
 }
 
-/* ── STATUS BAR ── */
+/* ── MOBILE ── */
+@media (max-width: 540px) {
+  body { padding: 0; }
+
+  .window {
+    max-width: 100%;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+  }
+
+  .cols {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .col {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .col:last-child {
+    border-bottom: none;
+  }
+
+  .items-area {
+    min-height: 180px;
+  }
+}
 .status-bar {
   border-top: 1px solid #000000;
   padding: 2px 8px;
-  font-size: 10px;
+  font-size: 12px;
   color: #444444;
   background: #eeeeee;
   display: flex;
@@ -645,6 +676,17 @@ function setStatus(msg) {
 
 document.getElementById('proInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addItem('pros'); });
 document.getElementById('conInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addItem('cons'); });
+
+function scrollToInput(el) {
+  setTimeout(function() {
+    el.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }, 300);
+}
+
+var inputs = document.querySelectorAll('input[type="text"]');
+for (var i = 0; i < inputs.length; i++) {
+  inputs[i].addEventListener('focus', function() { scrollToInput(this); });
+}
 document.getElementById('topicInput').addEventListener('input', function(e) {
   state.topic = e.target.value;
   var label = state.topic || 'Untitled';
