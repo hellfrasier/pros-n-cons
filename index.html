@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pros &amp; Cons</title>
+<style id="fontSizeSheet"></style>
 <style type="text/css">
 
 * {
@@ -367,9 +368,27 @@ input[type="text"]:focus {
   padding: 4px 0 2px;
 }
 
+/* ── FONT SIZE SELECT ── */
+select {
+  border: 1px solid #000000;
+  background: #ffffff;
+  font-family: "Geneva", "Charcoal", Arial, sans-serif;
+  font-size: 13px;
+  color: #000000;
+  padding: 2px 4px;
+  border-radius: 0;
+  -webkit-appearance: none;
+  cursor: default;
+}
+
 /* ── MOBILE ── */
 @media (max-width: 540px) {
   body { padding: 0; }
+
+  input[type="text"],
+  select {
+    font-size: 16px !important;
+  }
 
   .window {
     max-width: 100%;
@@ -482,19 +501,66 @@ input[type="text"]:focus {
 
     <div class="actions-bar">
       <button class="btn" id="copyBtn" onclick="copyText()">Copy Text</button>
+      <label class="field-label" for="fontSizeSelect" style="margin-left:8px;">Text size:</label>
+      <select id="fontSizeSelect" onchange="setFontSize(this.value)"></select>
     </div>
 
   </div><!-- /window-body -->
 
   <div class="status-bar">
     <span id="statusMsg">Ready.</span>
-    <span>Pros &amp; Cons v1.2</span>
+    <span>Pros &amp; Cons v1.3</span>
   </div>
 
 </div><!-- /window -->
 
 <script type="text/javascript">
-var state = {topic:'', pros:[], cons:[]};
+var FONT_SIZES = {
+  small:  { base: 12, ui: 11, minor: 10 },
+  normal: { base: 14, ui: 13, minor: 12 },
+  large:  { base: 17, ui: 16, minor: 14 },
+  huge:   { base: 21, ui: 19, minor: 17 }
+};
+
+function setFontSize(size) {
+  var s = FONT_SIZES[size] || FONT_SIZES.normal;
+  var sheet = document.getElementById('fontSizeSheet');
+  sheet.textContent =
+    'body { font-size: ' + s.base + 'px; }' +
+    '.titlebar-title { font-size: ' + s.base + 'px; }' +
+    '.field-label { font-size: ' + s.base + 'px; }' +
+    'input[type="text"] { font-size: ' + s.base + 'px; }' +
+    '.item-text-editable { font-size: ' + s.base + 'px; }' +
+    '.col-header { font-size: ' + s.base + 'px; }' +
+    '.add-area input[type="text"] { font-size: ' + s.ui + 'px; }' +
+    '.btn { font-size: ' + s.ui + 'px; }' +
+    '.score-row { font-size: ' + s.ui + 'px; }' +
+    '.verdict-row { font-size: ' + s.ui + 'px; }' +
+    '.page-subtitle { font-size: ' + s.ui + 'px; }' +
+    '.item-bullet { font-size: ' + s.ui + 'px; }' +
+    '.item-del-btn { font-size: ' + s.ui + 'px; }' +
+    '.weight-marker { font-size: ' + s.minor + 'px; }' +
+    '.col-count { font-size: ' + s.minor + 'px; }' +
+    '.status-bar { font-size: ' + s.minor + 'px; }' +
+    'select { font-size: ' + s.ui + 'px; }';
+  localStorage.setItem('proscons_fontsize', size);
+}
+
+function initFontSelect() {
+  var sel = document.getElementById('fontSizeSelect');
+  var opts = [['small','Small'],['normal','Normal'],['large','Large'],['huge','Huge']];
+  for (var i = 0; i < opts.length; i++) {
+    var o = document.createElement('option');
+    o.value = opts[i][0];
+    o.textContent = opts[i][1];
+    sel.appendChild(o);
+  }
+  var saved = localStorage.getItem('proscons_fontsize') || 'normal';
+  sel.value = saved;
+  setFontSize(saved);
+}
+
+
 
 function loadState() {
   try {
@@ -696,6 +762,7 @@ document.getElementById('topicInput').addEventListener('input', function(e) {
 });
 
 loadState();
+initFontSelect();
 </script>
 
 </body>
